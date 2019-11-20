@@ -27,6 +27,21 @@ def insert_articles(articles):
         finally:
             cursor.close()
             conn.close()
+#article is a tuple in the same order as this query..
+def insert_article(article):
+    query =  "INSERT INTO articles(id,title,author,tag,link,content) " \
+            "VALUES(%s,%s,%s,%s,%s,%s)"
+    conn = connect()
+    if conn!=None:
+        try:
+            cursor = conn.cursor()
+            cursor.execut(query, article)
+            conn.commit()
+        except Error as e:
+            print("Error : ",e)
+        finally:
+            cursor.close()
+            conn.close()
 def fetchall():
     print("hi......................")
     conn = connect()
