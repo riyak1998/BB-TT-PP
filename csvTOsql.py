@@ -1,6 +1,5 @@
 import mysql.connector
 from mysql.connector import Error
-from langdetect import detect
 from python_mysql_dbconfig import read_db_config
 import csv
 import sys
@@ -66,7 +65,6 @@ if __name__ == '__main__':
         csvreader = csv.reader(csvfile)  
         next(csvreader)
         articles=[]
-        i=0
         for row in csvreader:
             articles.append(("0",row[2],row[0],row[-1],row[1],row[-2]))
         insert_articles(articles)
