@@ -1,7 +1,11 @@
 import mysql.connector
 from mysql.connector import Error
+from langdetect import detect
 from python_mysql_dbconfig import read_db_config
 import csv
+import sys
+csv.field_size_limit(sys.maxsize)
+
 def connect():
     db_config = read_db_config()
     conn = None
@@ -13,6 +17,7 @@ def connect():
     except Error as e:
         print(e)
         return None
+
 def insert_articles(articles):
     query =  "INSERT INTO articles(id,title,author,tag,link,content) " \
             "VALUES(%s,%s,%s,%s,%s,%s)"
@@ -42,8 +47,8 @@ def insert_article(article):
         finally:
             cursor.close()
             conn.close()
+
 def fetchall():
-    print("hi......................")
     conn = connect()
     if conn!=None:
         cursor = conn.cursor()
@@ -56,13 +61,14 @@ def fetchall():
         
 
 if __name__ == '__main__':
-    file_name = "../../data/articles.csv"
+    file_name = "../../data/database_3.csv"
     with open(file_name, 'r') as csvfile:  
         csvreader = csv.reader(csvfile)  
         next(csvreader)
         articles=[]
+        i=0
         for row in csvreader:
-            articles.append(("0",row[4],row[0],"tt",row[3],row[-1]))
-        # insert_articles(articles)
+            articles.append(("0",row[2],row[0],row[-1],row[1],row[-2]))
+        insert_articles(articles)
     
     
