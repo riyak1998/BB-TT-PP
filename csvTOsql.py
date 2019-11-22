@@ -68,5 +68,3 @@ if __name__ == '__main__':
         for row in csvreader:
             articles.append(("0",row[2],row[0],row[-1],row[1],row[-2]))
         insert_articles(articles)
-    
-    
