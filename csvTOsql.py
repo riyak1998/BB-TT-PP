@@ -60,7 +60,7 @@ def fetchall():
         
 
 if __name__ == '__main__':
-    file_name = "../../data/database_3.csv"
+    file_name = "../../data/database_final_1.csv"
     with open(file_name, 'r') as csvfile:  
         csvreader = csv.reader(csvfile)  
         next(csvreader)

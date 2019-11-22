@@ -69,8 +69,10 @@ class Model:
     def __init__(self):
         self.name = "final_model"
         self.dimensions = 50
-        self.iterations = 100
-        self.passes=100
+        self.iterations = 200
+        self.passes=20
+        self.alhpa = 'auto'
+        self.eta = 'auto'
         self.corpus = MyCorpus.getInstance()
         try:
             self.model = models.LdaModel.load(datapath(self.name))
@@ -79,6 +81,7 @@ class Model:
             self.model.save(datapath(self.name))
         Model.__instance = self
     def getVector(self,article):
+        print(datapath(self.name))
         return self.model[self.corpus.dictionary.doc2bow(process(article).lower().split())]
     def getReccommendation(self,vector):
         index=1
@@ -96,7 +99,8 @@ class Model:
     def reTrain(self):
         self.model =  models.ldamulticore.LdaMulticore(self.corpus, id2word=self.corpus.dictionary, num_topics=self.dimensions, iterations=self.iterations, passes=self.passes,minimum_probability =0.0)
         self.model.save(datapath(self.name))
-# mymodel = Model.getInstance()
-# l = fetchall()
+mymodel = Model.getInstance()
+l = fetchall()
+mymodel.getVector(l[0])
 # s=mymodel.getReccommendation(mymodel.getVector(l[0]))
 # print(s)
