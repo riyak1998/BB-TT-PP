@@ -8,11 +8,13 @@ from nltk.corpus import stopwords
 from six import iteritems
 from csvTOsql import fetchall,connect
 from sklearn.metrics.pairwise import cosine_similarity
+import logging
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 def process(test_string):
     bad = ['`','~','!','@','#','$','%','^','&','*','(',')','_','-','+','=','{','[','}','}','|',':',';','"','<',',','>','.','?','/','0','1','2','3','4','5','6','7','8','9']
     for i in bad: 
-        test_string = test_string.replace(i, '') 
+        test_string = test_string.replace(i, ' ') 
     return test_string
 
 class MyCorpus:
@@ -28,7 +30,7 @@ class MyCorpus:
         self.query = "SELECT content FROM articles"
         self.cursor.execute(self.query)
         self.row = self.cursor.fetchone()
-        self.name = "final_dictionary"
+        self.name = "final_dictionary_1"
         try:
             self.dictionary = corpora.Dictionary().load(datapath(self.name))
         except:
@@ -59,6 +61,7 @@ class MyCorpus:
         print(self.dictionary)
     def addDocumentToDictionary(self,doc):
         self.dictionary.add_documents([process(doc).lower().split()])
+        self.dictionary.save(datapath(self.name))
 
 class Model:
     __instance=None
@@ -67,10 +70,10 @@ class Model:
             Model()
         return Model.__instance
     def __init__(self):
-        self.name = "final_model"
+        self.name = "final_model_1"
         self.dimensions = 50
-        self.iterations = 200
-        self.passes=20
+        self.iterations = 10
+        self.passes = 10
         self.alhpa = 'auto'
         self.eta = 'auto'
         self.corpus = MyCorpus.getInstance()
@@ -81,7 +84,7 @@ class Model:
             self.model.save(datapath(self.name))
         Model.__instance = self
     def getVector(self,article):
-        print(datapath(self.name))
+        # print(datapath(self.name))
         return self.model[self.corpus.dictionary.doc2bow(process(article).lower().split())]
     def getReccommendation(self,vector):
         index=1
@@ -100,7 +103,4 @@ class Model:
         self.model =  models.ldamulticore.LdaMulticore(self.corpus, id2word=self.corpus.dictionary, num_topics=self.dimensions, iterations=self.iterations, passes=self.passes,minimum_probability =0.0)
         self.model.save(datapath(self.name))
 mymodel = Model.getInstance()
-l = fetchall()
-mymodel.getVector(l[0])
-# s=mymodel.getReccommendation(mymodel.getVector(l[0]))
-# print(s)
+print(mymodel.model.show_topics(num_topics=50, num_words=5, log=False, formatted=False))
