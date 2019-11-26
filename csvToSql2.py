@@ -3,7 +3,13 @@ from mysql.connector import Error
 from python_mysql_dbconfig import read_db_config
 import csv
 import sys
+from trial import isWord
 csv.field_size_limit(sys.maxsize)
+def process(test_string):
+    bad = ['`','~','!','@','#','$','%','^','&','*','(',')','_','-','+','=','{','[','}','}','|',':',';','"','<',',','>','.','?','/','0','1','2','3','4','5','6','7','8','9']
+    for i in bad: 
+        test_string = test_string.replace(i, ' ') 
+    return test_string
 
 def connect():
     db_config = read_db_config()
@@ -31,7 +37,6 @@ def insert_articles(articles):
         finally:
             cursor.close()
             conn.close()
-#article is a tuple in the same order as this query..
 def insert_article(article):
     query =  "INSERT INTO articles(id,title,author,tag,link,content) " \
             "VALUES(%s,%s,%s,%s,%s,%s)"
@@ -46,7 +51,6 @@ def insert_article(article):
         finally:
             cursor.close()
             conn.close()
-
 def fetchall():
     conn = connect()
     if conn!=None:
@@ -57,20 +61,22 @@ def fetchall():
         for row in rowss:
             rows.append(row[0])
         return rows
-def getnumber(length,length2):
-    conn = connect()
-    if conn!=None:
-        cursor = conn.cursor()
-        cursor.execute("SELECT count(id) FROM articles where length(content)<="+ str(length)+" and length(content)>="+ str(length2))
-        rows = cursor.fetchall()
-        return rows[0][0]       
+        
 
 if __name__ == '__main__':
-    file_name = "../../data/database_final_1.csv"
+    file_name = "../../data/scraped_db_2.csv"
     with open(file_name, 'r') as csvfile:  
         csvreader = csv.reader(csvfile)  
         next(csvreader)
         articles=[]
+        t=0
         for row in csvreader:
-            articles.append(("0",row[2],row[0],row[-1],row[1],row[-2]))
+            st = process(row[-2])
+            if(len(st)>500):
+                if len(st)<3000:
+                    if isWord(st):
+                        articles.append(("0",row[2],row[0],row[-1],row[1],row[-2]))
+                else:
+                    if isWord(st[0:3000]):
+                        articles.append(("0",row[2],row[0],row[-1],row[1],row[-2]))
         insert_articles(articles)
