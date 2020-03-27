@@ -1,0 +1,20 @@
+self.dimensions = 50
+self.iterations = 200
+self.passes = 20
+bound = -8.51, diff = 0.189, perpex= 364
+conv = 1791/1829 ,1961/2000
+
+self.dimensions = 50
+self.iterations = 200
+self.passes = 50
+bound = -8.42, diff = 0.0312, perpex= 350
+conv = 1813/1829 ,1977/2000
+
+self.dimensions = 50
+self.iterations = 400
+self.passes = 50
+bound = -8.450, diff = 0.028474, perpex= 349.6
+conv = 1829/1829 ,1998/2000
+
+
+
