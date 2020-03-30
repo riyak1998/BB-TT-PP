@@ -1,1 +1,2 @@
 # BB-TT-PP
+autism,trauma,depression,exams,teenage,mental health,bullying,Schizophrenia,family,well being,yoga,health,food,diet,exercise,workout,sleep,insomnia,sleep paralysis,hallucination,suicide,tragic loss,alcohol,drugs,abuse,rape,molestation,success,career,happiness,stress,paranoia,self defense,joy,self defence,self esteem,body image,cyber addiction,teen pregnancy,peer pressure,competition,puberty,substance abuse,sexual health,aggresion,violence
